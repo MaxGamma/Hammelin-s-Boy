@@ -452,9 +452,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 194.50429
+    m_Target: 225.46004
     speed: 2
-    m_Value: 194.50429
+    m_Value: 225.46004
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -579,14 +579,14 @@ MonoBehaviour:
   m_LastFolders:
   - Assets
   m_LastFoldersGridSize: -1
-  m_LastProjectPath: C:\Users\pauma\Desktop\Uni\2n Semestre\Projecte I\Hammelin's
+  m_LastProjectPath: C:\Users\pauma\Desktop\Uni\2n Semestre\Projecte I\HammelinRepo\Hammelin-s-Boy\Hammelin's
     Boy v1
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: c0240000
-    m_LastClickedID: 9408
-    m_ExpandedIDs: 00000000c02400007025000000ca9a3bffffff7f
+    m_SelectedIDs: ba240000
+    m_LastClickedID: 9402
+    m_ExpandedIDs: 00000000ba2400006a25000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -614,7 +614,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000c024000070250000
+    m_ExpandedIDs: 00000000ba2400006a250000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -692,9 +692,9 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 640
+    y: 639
     width: 1529
-    height: 337
+    height: 338
 --- !u!114 &19
 MonoBehaviour:
   m_ObjectHideFlags: 52
