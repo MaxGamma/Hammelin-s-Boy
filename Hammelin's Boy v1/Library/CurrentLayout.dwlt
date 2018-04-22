@@ -109,7 +109,11 @@ MonoBehaviour:
   m_MinSize: {x: 683, y: 492}
   m_MaxSize: {x: 14004, y: 14042}
   vertical: 0
+<<<<<<< Updated upstream
   controlID: 6248
+=======
+  controlID: 68
+>>>>>>> Stashed changes
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -133,7 +137,11 @@ MonoBehaviour:
   m_MinSize: {x: 406, y: 492}
   m_MaxSize: {x: 10002, y: 14042}
   vertical: 1
+<<<<<<< Updated upstream
   controlID: 6249
+=======
+  controlID: 69
+>>>>>>> Stashed changes
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -157,7 +165,11 @@ MonoBehaviour:
   m_MinSize: {x: 406, y: 221}
   m_MaxSize: {x: 8006, y: 4021}
   vertical: 0
+<<<<<<< Updated upstream
   controlID: 6250
+=======
+  controlID: 70
+>>>>>>> Stashed changes
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -366,10 +378,17 @@ MonoBehaviour:
     height: 343
   m_PersistentViewDataDictionary: {fileID: 0}
   m_TreeViewState:
+<<<<<<< Updated upstream
     scrollPos: {x: 0, y: 7882}
     m_SelectedIDs: c4dfffff
     m_LastClickedID: -8252
     m_ExpandedIDs: c4dfffffccebffff000000008435000004380000103b0000623b00007c3b0000
+=======
+    scrollPos: {x: 0, y: 0}
+    m_SelectedIDs: 
+    m_LastClickedID: 0
+    m_ExpandedIDs: e6fbffff00000000
+>>>>>>> Stashed changes
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -425,9 +444,15 @@ MonoBehaviour:
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
+<<<<<<< Updated upstream
     m_Target: {x: 125.32854, y: 47.930786, z: 13.841749}
     speed: 2
     m_Value: {x: 125.32854, y: 47.930786, z: 13.841749}
+=======
+    m_Target: {x: 29.909895, y: -0.620543, z: 0}
+    speed: 2
+    m_Value: {x: 29.909895, y: -0.620543, z: 0}
+>>>>>>> Stashed changes
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -455,9 +480,15 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
+<<<<<<< Updated upstream
     m_Target: 63.255745
     speed: 2
     m_Value: 63.255745
+=======
+    m_Target: 21.552822
+    speed: 2
+    m_Value: 21.552822
+>>>>>>> Stashed changes
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -545,10 +576,17 @@ MonoBehaviour:
     Boy v1
   m_IsLocked: 0
   m_FolderTreeState:
+<<<<<<< Updated upstream
     scrollPos: {x: 0, y: 215}
     m_SelectedIDs: e4310000
     m_LastClickedID: 12772
     m_ExpandedIDs: 00000000523100007c310000903100009a310000e4310000ec31000000320000103200002a32000000ca9a3bffffff7f
+=======
+    scrollPos: {x: 0, y: 248}
+    m_SelectedIDs: ba260000
+    m_LastClickedID: 9914
+    m_ExpandedIDs: 00000000f02500006a260000ac260000b426000016270000342700006c27000080270000bc27000000ca9a3bffffff7f
+>>>>>>> Stashed changes
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -576,7 +614,11 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
+<<<<<<< Updated upstream
     m_ExpandedIDs: 00000000523100007c310000903100009a310000e4310000ec31000000320000103200002a32000000ca9a3bffffff7f
+=======
+    m_ExpandedIDs: 00000000f02500006a260000ac260000b426000016270000342700006c27000080270000bc270000
+>>>>>>> Stashed changes
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
