@@ -34,13 +34,13 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.D))
         {
-            transform.localScale = new Vector3(0.5f, 0.4f);
+            transform.localScale = new Vector3(0.4f, 0.3f);
             GetComponent<Rigidbody2D>().velocity = new Vector2(velocidadMovimiento, GetComponent<Rigidbody2D>().velocity.y);
         }
 
         if (Input.GetKey(KeyCode.A))
         {
-            transform.localScale = new Vector3(-0.5f, 0.4f);
+            transform.localScale = new Vector3(-0.4f, 0.3f);
             GetComponent<Rigidbody2D>().velocity = new Vector2(-velocidadMovimiento, GetComponent<Rigidbody2D>().velocity.y);
         }
         if (Input.GetKeyUp(KeyCode.D))
