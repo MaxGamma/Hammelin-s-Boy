@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class GM_ : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
+    public GameObject pausemenu;
 	
 	// Update is called once per frame
 	void Update () {
@@ -15,5 +12,27 @@ public class GM_ : MonoBehaviour {
         {
             GameObject.Find("Main Camera").GetComponent<CameraPlayer>().counter += 1;
         }
+
+        activeMenu();
+    }
+
+    public void activeMenu()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (pausemenu.activeInHierarchy == true)
+            {
+                pausemenu.SetActive(false);
+            }
+            else if (pausemenu.activeInHierarchy == false)
+            {
+                pausemenu.SetActive(true);
+            }
+        }
+    }
+
+    public void continueButton()
+    {
+        pausemenu.SetActive(false);
     }
 }

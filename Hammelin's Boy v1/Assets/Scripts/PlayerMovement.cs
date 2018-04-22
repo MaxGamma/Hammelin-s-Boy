@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour {
     //GameObject Player;
     public int nSaltos = 0;
     bool tierra = false;
+    bool dead = false;
     // Use this for initialization
     void Start () {
      //  Player = GameObject.Find("Player");
