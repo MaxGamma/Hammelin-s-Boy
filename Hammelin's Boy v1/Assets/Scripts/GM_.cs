@@ -7,11 +7,8 @@ public class GM_ : MonoBehaviour {
     public GameObject pausemenu;
 	
 	// Update is called once per frame
-	void Update () {
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            GameObject.Find("Main Camera").GetComponent<CameraPlayer>().counter += 1;
-        }
+	void Update ()
+    { 
 
         activeMenu();
     }

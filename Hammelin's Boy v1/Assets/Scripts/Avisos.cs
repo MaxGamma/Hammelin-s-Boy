@@ -7,37 +7,34 @@ public class Avisos : MonoBehaviour {
 
     public Animator animator;
     public DialogueTrigger conversation;
+    public GameObject paret1;
+    public GameObject paret2;
 
-    bool isColliding = false;
+    void Start()
+    {
+        gameObject.GetComponent<BoxCollider2D>().enabled = true;
+    }
 
     void  OnCollisionEnter2D(Collision2D coll)
     {
+        if (coll.gameObject.tag == "Player")
+        {
+            gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            animator.SetBool("isTrigger", true);
+
+            paret1.GetComponent<BoxCollider2D>().enabled = true;
+            paret2.GetComponent<BoxCollider2D>().enabled = true;
+        }
         
 
-        if (GetComponent<Collider>().gameObject.tag == "Player" || GetComponent<Collider>().gameObject.tag == "Rat")
-        {
-            isColliding = true;
-        }
-        else
-        {
-            isColliding = false;
-        }
+
     }
 
     void Update()
     {
-        if (isColliding == true)
-        {
-            gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
-            animator.SetBool("isTrigger", true);
-        }
-        else
-        {
-            gameObject.GetComponent<BoxCollider2D>().isTrigger = false;
-            animator.SetBool("isTrigger", false);
-        }
+        
 
-        if (gameObject.GetComponent<BoxCollider2D>().isTrigger == true && Input.GetKey(KeyCode.E))
+        if (gameObject.GetComponent<BoxCollider2D>().enabled == false && Input.GetKey(KeyCode.E))
         {
             conversation.TriggerDialogue();
         }
