@@ -6,10 +6,27 @@ public class Avisos : MonoBehaviour {
 
 
     public Animator animator;
+    public DialogueTrigger conversation;
 
-    void OnCollisionEnter2D(Collision2D collider)
+    bool isColliding = false;
+
+    void  OnCollisionEnter2D(Collision2D coll)
     {
+        
+
         if (collider.gameObject.tag == "Player" || collider.gameObject.tag == "Rat")
+        {
+            isColliding = true;
+        }
+        else
+        {
+            isColliding = false;
+        }
+    }
+
+    void Update()
+    {
+        if (isColliding == true)
         {
             gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
             animator.SetBool("isTrigger", true);
@@ -18,6 +35,11 @@ public class Avisos : MonoBehaviour {
         {
             gameObject.GetComponent<BoxCollider2D>().isTrigger = false;
             animator.SetBool("isTrigger", false);
+        }
+
+        if (gameObject.GetComponent<BoxCollider2D>().isTrigger == true && Input.GetKey(KeyCode.E))
+        {
+            conversation.TriggerDialogue();
         }
     }
 }
