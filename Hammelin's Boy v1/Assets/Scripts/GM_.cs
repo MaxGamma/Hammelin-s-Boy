@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GM_ : MonoBehaviour {
+<<<<<<< Updated upstream
 
     public GameObject pausemenu;
+=======
+>>>>>>> Stashed changes
 	
 	// Update is called once per frame
-	void Update () {
-        if (Input.GetKeyDown(KeyCode.C))
+	public void changeCamera() {
+        if (Input.GetKey(KeyCode.C))
         {
             GameObject.Find("Main Camera").GetComponent<CameraPlayer>().counter += 1;
         }

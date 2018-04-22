@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
     //GameObject Player;
-    public int nSaltos = 0;
+    public float alturaSalto;
+    public float velocidadMovimiento;
     bool tierra = false;
     bool dead = false;
     // Use this for initialization
@@ -16,41 +17,49 @@ public class PlayerMovement : MonoBehaviour {
     {
         if (collision.gameObject.tag == "Ground")
         {
-            Debug.Log("Tierra True");
+            
             tierra = true;
         }
     }
     // Update is called once per frame
     void FixedUpdate () {
       
-            if (Input.GetKey(KeyCode.Space))
+            if (Input.GetKey(KeyCode.Space)&& (tierra==true))
             {
-                tierra = false;
-                   GetComponent<Rigidbody2D>().velocity = new Vector2(0, 5);
-                
+            Saltar();
+            
             }
             
             if (Input.GetKey(KeyCode.D))
             {
-                GetComponent<Rigidbody2D>().AddForce(new Vector2(20, 0));
-            }
-            if (Input.GetKey(KeyCode.S))
-            {
-                GetComponent<Rigidbody2D>().AddForce(new Vector2(0, -20));
-            }
+            transform.localScale = new Vector3(0.5f,0.4f);
+            GetComponent<Rigidbody2D>().velocity = new Vector2(velocidadMovimiento, GetComponent<Rigidbody2D>().velocity.y);
+        }
+           
             if (Input.GetKey(KeyCode.A))
             {
-                GetComponent<Rigidbody2D>().AddForce(new Vector2(-20, 0));
-            }
-        //}
-       /*else
+            transform.localScale= new Vector3 (-0.5f, 0.4f);
+            GetComponent<Rigidbody2D>().velocity = new Vector2(-velocidadMovimiento, GetComponent<Rigidbody2D>().velocity.y);
+        }
+        if (Input.GetKeyUp(KeyCode.D))
         {
-            GetComponent<Rigidbody2D>().AddForce(new Vector2(0,-10));
- 
-            saltar = false;
-        }*/
+            GetComponent<Rigidbody2D>().velocity = new Vector2(0,0);
+        }
+
+        if (Input.GetKeyUp(KeyCode.A))
+        {
+            GetComponent<Rigidbody2D>().velocity = new Vector2(0,0);
+        }
+
     }
-   
+    public void Saltar()
+    {
+        GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x,
+         alturaSalto);
+        tierra = false;
+    }
 }
+   
+
 
 
