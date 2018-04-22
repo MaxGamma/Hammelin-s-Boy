@@ -38,6 +38,7 @@ public class RatMovement : MonoBehaviour {
         {
             transform.position = new Vector3(GameObject.FindWithTag("Player").transform.position.x - 2, GameObject.FindWithTag("Player").transform.position.y - 0.2f, GameObject.FindWithTag("Player").transform.position.z);
         }
+        
     }
 
 }
