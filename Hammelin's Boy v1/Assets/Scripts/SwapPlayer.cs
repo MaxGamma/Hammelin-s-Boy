@@ -40,6 +40,7 @@ public class SwapPlayer : MonoBehaviour
             spriteRenderer.sprite = rat;
             box.GetComponent<BoxCollider2D>().enabled = false;
             capsule.GetComponent<CapsuleCollider2D>().enabled = true;
+            gameObject.tag = "Rat";
 
         }
         else if (Input.GetKey(KeyCode.T)&& (Activate==true))
@@ -49,6 +50,7 @@ public class SwapPlayer : MonoBehaviour
             spriteRenderer.sprite = player;
             box.GetComponent<BoxCollider2D>().enabled = true;
             capsule.GetComponent<CapsuleCollider2D>().enabled = false;
+            gameObject.tag = "Player";
 
         }
 

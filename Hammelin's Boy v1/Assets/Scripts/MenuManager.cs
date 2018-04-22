@@ -20,6 +20,12 @@ public class MenuManager : MonoBehaviour {
         Application.Quit();
     }
 
+    public void TryAgain()
+    {
+        Application.LoadLevel(Application.loadedLevel);
+    }
+    
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
