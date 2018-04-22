@@ -14,7 +14,7 @@ public class Avisos : MonoBehaviour {
     {
         
 
-        if (collider.gameObject.tag == "Player" || collider.gameObject.tag == "Rat")
+        if (GetComponent<Collider>().gameObject.tag == "Player" || GetComponent<Collider>().gameObject.tag == "Rat")
         {
             isColliding = true;
         }
