@@ -10,6 +10,8 @@ public class Avisos : MonoBehaviour {
     public GameObject paret1;
     public GameObject paret2;
 
+    public GameObject endTrigger;
+
     public Animator ending;
 
     void Start()
@@ -35,14 +37,15 @@ public class Avisos : MonoBehaviour {
     void Update()
     {
         
-
         if (gameObject.GetComponent<BoxCollider2D>().enabled == false && Input.GetKey(KeyCode.E))
         {
             conversation.TriggerDialogue();
-            /*if (gameObject.Tag = "Ending")
+            if (gameObject.tag == "Ending")
             {
-                ending.SetBool(isTrigger, true);
-            }*/
+                endTrigger.GetComponent<BoxCollider2D>().enabled = true;
+            }
         }
+
+        
     }
 }
