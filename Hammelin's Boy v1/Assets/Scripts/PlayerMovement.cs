@@ -3,53 +3,111 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class PlayerMovement : MonoBehaviour {
-    //GameObject Player;
-    public int nSaltos = 0;
-    bool tierra = false;
+public class PlayerMovement : MonoBehaviour
+{
+    public float moveSpeed;
+    public float jumpForce;
+
+    public KeyCode left;
+    public KeyCode right;
+    public KeyCode jump;
+   
+
+    private Rigidbody2D theRB;
+
+    public Transform groundCheckPoint;
+    public float groundCheckRadius;
+    public LayerMask whatIsGround;
+
+    public bool isGrounded;
+
+    public bool touchingLeftWall;
+    public bool touchingRightWall;
+
+    public Animator boyAnim;
+    public Animator ratAnim;
+    public Animator gameOverAnim;
+
     // Use this for initialization
-    void Start () {
-     //  Player = GameObject.Find("Player");
+    void Start ()
+    {
+        theRB = GetComponent<Rigidbody2D>();
+
+        boyAnim = boyAnim.GetComponent<Animator>();
+        ratAnim = ratAnim.GetComponent<Animator>();
+        gameOverAnim = gameOverAnim.GetComponent<Animator>();
+
+        touchingLeftWall = false;
+        touchingRightWall = false;
+    }
+	
+	// Update is called once per frame
+	void Update () {
+        isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, groundCheckRadius, whatIsGround);
+
+		if (Input.GetKey(left) && touchingLeftWall == false)
+        {
+            theRB.velocity = new Vector2(-moveSpeed, theRB.velocity.y);
+            touchingRightWall = false;
+        }
+        else if (Input.GetKey(right) && touchingRightWall == false)
+        {
+            theRB.velocity = new Vector2(moveSpeed, theRB.velocity.y);
+            touchingLeftWall = false;
+        }
+        else
+        {
+            theRB.velocity = new Vector2(0, theRB.velocity.y);
+        }
+
+        if (Input.GetKey(jump) && isGrounded)
+        {
+            theRB.velocity = new Vector2(theRB.velocity.x, jumpForce);
+        }
+
+       
+        if (theRB.velocity.x < 0)
+        {
+            transform.localScale = new Vector3(-0.3f, 0.25f);
+        }
+        else if (theRB.velocity.x > 0)
+        {
+            transform.localScale = new Vector3(0.3f, 0.25f);
+        }
 	}
+
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Ground")
+        //Parets colisio
+        if (collision.gameObject.tag == "LeftWall")
         {
-            Debug.Log("Tierra True");
-            tierra = true;
+            touchingLeftWall = true;
         }
-    }
-    // Update is called once per frame
-    void FixedUpdate () {
-      
-            if (Input.GetKey(KeyCode.Space))
-            {
-                tierra = false;
-                   GetComponent<Rigidbody2D>().velocity = new Vector2(0, 5);
-                
-            }
-            
-            if (Input.GetKey(KeyCode.D))
-            {
-                GetComponent<Rigidbody2D>().AddForce(new Vector2(20, 0));
-            }
-            if (Input.GetKey(KeyCode.S))
-            {
-                GetComponent<Rigidbody2D>().AddForce(new Vector2(0, -20));
-            }
-            if (Input.GetKey(KeyCode.A))
-            {
-                GetComponent<Rigidbody2D>().AddForce(new Vector2(-20, 0));
-            }
-        //}
-       /*else
+        else if (collision.gameObject.tag == "RightWall")
         {
-            GetComponent<Rigidbody2D>().AddForce(new Vector2(0,-10));
- 
-            saltar = false;
-        }*/
+            touchingRightWall = true;
+        }
+
+        if (collision.gameObject.tag == "Obstacle")
+        {
+            gameOverAnim.SetBool("isTrigger", true);
+        }
+
+       
     }
-   
+
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        //Parets colisio
+        if (collision.gameObject.tag == "LeftWall")
+        {
+            touchingLeftWall = false;
+        }
+        else if (collision.gameObject.tag == "RightWall")
+        {
+            touchingRightWall = false;
+        }
+
+
+    }
 }
-
-
