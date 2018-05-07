@@ -28,6 +28,9 @@ public class PlayerMovement : MonoBehaviour
     public Animator ratAnim;
     public Animator gameOverAnim;
 
+    
+
+
     // Use this for initialization
     void Start ()
     {

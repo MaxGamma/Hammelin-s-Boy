@@ -4,19 +4,20 @@ using UnityEngine;
 
 public class Spikes : MonoBehaviour {
 
-    public GameObject gameOver;
-    Animator animator;
+    private CapsuleCollider2D capsule;
 
     void Start()
     {
-        animator = gameOver.GetComponent<Animator>();
+        capsule = GetComponent<CapsuleCollider2D>();
     }
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "Player" || collision.gameObject.tag == "Rat")
+        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Rat")
         {
-            animator.SetBool("isTrigger", true);
+            capsule.enabled = false;
         }
+
+
     }
 
 }

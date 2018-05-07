@@ -2,33 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleEnemy : MonoBehaviour {
+public class PlatformMovement : MonoBehaviour {
 
-    public int maxValue = 15; 
+    public int maxValue = 15;
     public int minValue = -15;
 
+    public float speed;
     public int orientation = 0;
 
     private float currentValue = 1;
 
-    private float initialPosX;
-    private float initialPosY;
+    private float initialPos;
 
     private float direction = 1;
 
-    void Start ()
+    private float initialPosX;
+    private float initialPosY;
+
+    void Start()
     {
         initialPosX = transform.position.x;
         initialPosY = transform.position.y;
     }
-	
-	
-	void Update ()
+
+
+    void Update()
     {
         //Movement
 
-        
-        currentValue += Time.deltaTime * direction; 
+
+        currentValue += Time.deltaTime * direction * speed;
 
         if (currentValue >= maxValue)
         {
@@ -51,16 +54,16 @@ public class SimpleEnemy : MonoBehaviour {
         {
             transform.position = new Vector3(transform.position.x, currentValue + initialPosY, 0);
         }
-        
+
 
         //Flip
         if (direction > 0)
         {
-            transform.localScale = new Vector3(-0.3f, 0.3f);
+            transform.localScale = new Vector3(-0.5f, 0.5f);
         }
         else if (direction < 0)
         {
-            transform.localScale = new Vector3(0.3f, 0.3f);
+            transform.localScale = new Vector3(0.5f, 0.5f);
         }
     }
 }
