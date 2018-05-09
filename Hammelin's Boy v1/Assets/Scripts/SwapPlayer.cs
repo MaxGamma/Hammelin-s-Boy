@@ -16,6 +16,7 @@ public class SwapPlayer : MonoBehaviour
     private SpriteRenderer ratSprite;
     private SpriteRenderer playerSprite;
 
+    bool value3;
 
     void Start()
     {
@@ -31,9 +32,12 @@ public class SwapPlayer : MonoBehaviour
 
     void Update()
     {
-        if ( Input.GetKeyDown(KeyCode.RightShift))
+        value3 = Input.GetKeyDown("joystick button 1");
+
+        if (Input.GetKeyDown(KeyCode.RightShift) || value3)
         {
             changeSprite();
+
         }
     }
 

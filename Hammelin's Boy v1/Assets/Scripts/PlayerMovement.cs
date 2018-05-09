@@ -5,13 +5,20 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveSpeed;
-    public float jumpForce;
+    public float moveSpeedPlayer;
+    public float moveSpeedRat;
+    public float jumpForcePlayer;
+    public float jumpForceRat;
 
     public KeyCode left;
     public KeyCode right;
     public KeyCode jump;
-   
+
+    float value;
+    float value2;
+
+    private GameObject enemies;
+    private GameObject platforms;
 
     private Rigidbody2D theRB;
 
@@ -28,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
     public Animator ratAnim;
     public Animator gameOverAnim;
 
-    
+    public bool dead = false;
 
 
     // Use this for initialization
@@ -42,42 +49,85 @@ public class PlayerMovement : MonoBehaviour
 
         touchingLeftWall = false;
         touchingRightWall = false;
+
+        enemies = GameObject.Find("Enemies");
+        platforms = GameObject.Find("Platforms");
     }
 	
 	// Update is called once per frame
-	void Update () {
-        isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, groundCheckRadius, whatIsGround);
+	void Update ()
+    {
+        
+            value = Input.GetAxis("Horizontal");
+            value2 = Input.GetAxis("Jump");
 
-		if (Input.GetKey(left) && touchingLeftWall == false)
-        {
-            theRB.velocity = new Vector2(-moveSpeed, theRB.velocity.y);
-            touchingRightWall = false;
-        }
-        else if (Input.GetKey(right) && touchingRightWall == false)
-        {
-            theRB.velocity = new Vector2(moveSpeed, theRB.velocity.y);
-            touchingLeftWall = false;
-        }
-        else
-        {
-            theRB.velocity = new Vector2(0, theRB.velocity.y);
-        }
 
-        if (Input.GetKey(jump) && isGrounded)
-        {
-            theRB.velocity = new Vector2(theRB.velocity.x, jumpForce);
-        }
 
-       
-        if (theRB.velocity.x < 0)
-        {
-            transform.localScale = new Vector3(-0.3f, 0.25f);
+
+            isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, groundCheckRadius, whatIsGround);
+
+
+
+            if ((Input.GetKey(left) || value == -1) && touchingLeftWall == false)
+            {
+                if (gameObject.tag == "Player")
+                {
+                    theRB.velocity = new Vector2(-moveSpeedPlayer, theRB.velocity.y);
+                }
+                if (gameObject.tag == "Rat")
+                {
+                    theRB.velocity = new Vector2(-moveSpeedRat, theRB.velocity.y);
+                }
+
+                touchingRightWall = false;
+            }
+            else if ((Input.GetKey(right) || value == 1) && touchingRightWall == false)
+            {
+                if (gameObject.tag == "Player")
+                {
+                    theRB.velocity = new Vector2(moveSpeedPlayer, theRB.velocity.y);
+                }
+                if (gameObject.tag == "Rat")
+                {
+                    theRB.velocity = new Vector2(moveSpeedRat, theRB.velocity.y);
+                }
+
+                touchingRightWall = false;
+            }
+            else
+            {
+                theRB.velocity = new Vector2(0, theRB.velocity.y);
+            }
+
+
+            if ((Input.GetKey(jump) || value2 > 0) && isGrounded)
+            {
+                if (gameObject.tag == "Player")
+                {
+                    theRB.velocity = new Vector2(theRB.velocity.x, jumpForcePlayer);
+                }
+                if (gameObject.tag == "Rat")
+                {
+                    theRB.velocity = new Vector2(theRB.velocity.x, jumpForceRat);
+                }
+            }
+
+
+
+            if (dead == false)
+            {
+                if (theRB.velocity.x < 0)
+                {
+                    transform.localScale = new Vector3(-0.3f, 0.25f);
+                }
+                else if (theRB.velocity.x > 0)
+                {
+                    transform.localScale = new Vector3(0.3f, 0.25f);
+                }
+            }
+
+           
         }
-        else if (theRB.velocity.x > 0)
-        {
-            transform.localScale = new Vector3(0.3f, 0.25f);
-        }
-	}
 
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -93,24 +143,42 @@ public class PlayerMovement : MonoBehaviour
 
         if (collision.gameObject.tag == "Obstacle")
         {
+            dead = true;
+            ratAnim.enabled = false;
+            theRB.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+
+            for (int i = 0; i < platforms.transform.childCount; i++)
+            {
+                platforms.transform.GetChild(i).GetComponent<PlatformMovement>().die(dead);
+            }
+
+            for (int i = 0; i < enemies.transform.childCount; i++)
+            {
+                enemies.transform.GetChild(i).GetComponent<SimpleEnemy>().die(dead);
+            }
             gameOverAnim.SetBool("isTrigger", true);
         }
-
-       
     }
 
     void OnCollisionExit2D(Collision2D collision)
-    {
-        //Parets colisio
-        if (collision.gameObject.tag == "LeftWall")
         {
-            touchingLeftWall = false;
-        }
-        else if (collision.gameObject.tag == "RightWall")
-        {
-            touchingRightWall = false;
-        }
+            //Parets colisio
+            if (collision.gameObject.tag == "LeftWall")
+            {
+                touchingLeftWall = false;
+            }
+            else if (collision.gameObject.tag == "RightWall")
+            {
+                touchingRightWall = false;
+            }
 
 
+        }
     }
-}
+
+
+
+
+
+
+
