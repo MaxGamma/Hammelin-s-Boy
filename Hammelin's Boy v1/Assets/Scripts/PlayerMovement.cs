@@ -36,8 +36,10 @@ public class PlayerMovement : MonoBehaviour
     public Animator gameOverAnim;
 
     public bool dead = false;
+    public bool paused = false;
+    private RigidbodyConstraints2D originalConstraints;
 
-
+    public GameObject pausemenu;
     // Use this for initialization
     void Start ()
     {
@@ -116,6 +118,8 @@ public class PlayerMovement : MonoBehaviour
 
             if (dead == false)
             {
+            if (paused == false)
+            {
                 if (theRB.velocity.x < 0)
                 {
                     transform.localScale = new Vector3(-0.3f, 0.25f);
@@ -125,7 +129,8 @@ public class PlayerMovement : MonoBehaviour
                     transform.localScale = new Vector3(0.3f, 0.25f);
                 }
             }
-
+            }
+        activeMenu();
            
         }
 
@@ -174,7 +179,55 @@ public class PlayerMovement : MonoBehaviour
 
 
         }
+    public void activeMenu()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (pausemenu.activeInHierarchy == true)
+            {
+                paused = false;
+                ratAnim.enabled = true;
+                theRB.constraints = originalConstraints;
+
+                for (int i = 0; i < platforms.transform.childCount; i++)
+                {
+                    platforms.transform.GetChild(i).GetComponent<PlatformMovement>().reset(paused);
+                }
+
+                for (int i = 0; i < enemies.transform.childCount; i++)
+                {
+                    enemies.transform.GetChild(i).GetComponent<SimpleEnemy>().reset(paused);
+                }
+                GetComponent<SwapPlayer>().enabled = true;
+                pausemenu.SetActive(false);
+            }
+            else if (pausemenu.activeInHierarchy == false)
+            {
+                paused = true;
+                ratAnim.enabled = false;
+                originalConstraints = theRB.constraints;
+                theRB.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+
+                for (int i = 0; i < platforms.transform.childCount; i++)
+                {
+                    platforms.transform.GetChild(i).GetComponent<PlatformMovement>().reset(paused);
+                }
+
+                for (int i = 0; i < enemies.transform.childCount; i++)
+                {
+                    enemies.transform.GetChild(i).GetComponent<SimpleEnemy>().reset(paused);
+                }
+                GetComponent<SwapPlayer>().enabled = false;
+                pausemenu.SetActive(true);
+            }
+        }
     }
+
+    public void continueButton()
+    {
+        pausemenu.SetActive(false);
+    }
+}
 
 
 

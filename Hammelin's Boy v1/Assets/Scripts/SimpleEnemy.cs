@@ -18,6 +18,9 @@ public class SimpleEnemy : MonoBehaviour {
 
     private bool deadPlayer = false;
 
+    private bool paused = false;
+
+    private RigidbodyConstraints2D originalConstraints;
     void Start ()
     {
         initialPosX = transform.position.x;
@@ -30,7 +33,7 @@ public class SimpleEnemy : MonoBehaviour {
         if (deadPlayer == false)
         {
             //Movement
-
+            if(paused == false) { 
 
             currentValue += Time.deltaTime * direction;
 
@@ -67,6 +70,7 @@ public class SimpleEnemy : MonoBehaviour {
                 transform.localScale = new Vector3(0.3f, 0.3f);
             }
         }
+        }
         
     }
 
@@ -74,5 +78,18 @@ public class SimpleEnemy : MonoBehaviour {
     {
         this.deadPlayer = deadPlayer;
         GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+    }
+    public void reset(bool paused)
+    {
+        this.paused = paused;
+        if(paused == true)
+        {
+            GetComponent<Rigidbody2D>().constraints = originalConstraints;
+        }
+        else
+        {
+            originalConstraints = GetComponent<Rigidbody2D>().constraints;
+            GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+        }
     }
 }

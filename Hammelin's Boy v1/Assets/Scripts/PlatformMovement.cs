@@ -20,7 +20,7 @@ public class PlatformMovement : MonoBehaviour {
 
     private float initialPosX;
     private float initialPosY;
-
+    private bool paused = false;
     void Start()
     {
         initialPosX = transform.position.x;
@@ -33,41 +33,43 @@ public class PlatformMovement : MonoBehaviour {
         if (deadPlayer == false)
         {
             //Movement
-
-
-            currentValue += Time.deltaTime * direction * speed;
-
-            if (currentValue >= maxValue)
+            if (paused == false)
             {
-                direction *= -1;
-                currentValue = maxValue;
-            }
 
-            else if (currentValue <= minValue)
-            {
-                direction *= -1;
-                currentValue = minValue;
-            }
+                currentValue += Time.deltaTime * direction * speed;
 
-            //Horizontal
-            if (orientation == 0)
-            {
-                transform.position = new Vector3(currentValue + initialPosX, transform.position.y, 0);
-            }
-            else if (orientation == 1) //Vertical
-            {
-                transform.position = new Vector3(transform.position.x, currentValue + initialPosY, 0);
-            }
+                if (currentValue >= maxValue)
+                {
+                    direction *= -1;
+                    currentValue = maxValue;
+                }
+
+                else if (currentValue <= minValue)
+                {
+                    direction *= -1;
+                    currentValue = minValue;
+                }
+
+                //Horizontal
+                if (orientation == 0)
+                {
+                    transform.position = new Vector3(currentValue + initialPosX, transform.position.y, 0);
+                }
+                else if (orientation == 1) //Vertical
+                {
+                    transform.position = new Vector3(transform.position.x, currentValue + initialPosY, 0);
+                }
 
 
-            //Flip
-            if (direction > 0)
-            {
-                transform.localScale = new Vector3(-0.5f, 0.5f);
-            }
-            else if (direction < 0)
-            {
-                transform.localScale = new Vector3(0.5f, 0.5f);
+                //Flip
+                if (direction > 0)
+                {
+                    transform.localScale = new Vector3(-0.5f, 0.5f);
+                }
+                else if (direction < 0)
+                {
+                    transform.localScale = new Vector3(0.5f, 0.5f);
+                }
             }
         }
         
@@ -78,6 +80,17 @@ public class PlatformMovement : MonoBehaviour {
         this.deadPlayer = deadPlayer;
         GetComponent<Animator>().enabled = false;
     }
-
+    public void reset(bool paused)
+    {
+        this.paused = paused;
+        if(paused == false)
+        {
+            GetComponent<Animator>().enabled = true;
+        }
+        else
+        {
+            GetComponent<Animator>().enabled = false;
+        }
+    }
 
 }
