@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 
@@ -36,10 +37,15 @@ public class PlayerMovement : MonoBehaviour
     public Animator gameOverAnim;
 
     public bool dead = false;
-    public bool paused = false;
+
+    private bool paused = false;
     private RigidbodyConstraints2D originalConstraints;
 
     public GameObject pausemenu;
+
+    Stopwatch timer;
+
+
     // Use this for initialization
     void Start ()
     {
@@ -59,25 +65,21 @@ public class PlayerMovement : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        
             value = Input.GetAxis("Horizontal");
             value2 = Input.GetAxis("Jump");
 
-
-
-
             isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, groundCheckRadius, whatIsGround);
-
-
 
             if ((Input.GetKey(left) || value == -1) && touchingLeftWall == false)
             {
                 if (gameObject.tag == "Player")
                 {
+                    boyAnim.SetBool("boyMovement", true);
                     theRB.velocity = new Vector2(-moveSpeedPlayer, theRB.velocity.y);
                 }
                 if (gameObject.tag == "Rat")
                 {
+                    ratAnim.SetBool("ratMovement", true);
                     theRB.velocity = new Vector2(-moveSpeedRat, theRB.velocity.y);
                 }
 
@@ -87,10 +89,13 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (gameObject.tag == "Player")
                 {
+                    boyAnim.SetBool("boyMovement", true);
                     theRB.velocity = new Vector2(moveSpeedPlayer, theRB.velocity.y);
+                    
                 }
                 if (gameObject.tag == "Rat")
                 {
+                    ratAnim.SetBool("ratMovement", true);
                     theRB.velocity = new Vector2(moveSpeedRat, theRB.velocity.y);
                 }
 
@@ -98,39 +103,52 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                theRB.velocity = new Vector2(0, theRB.velocity.y);
+                boyAnim.SetBool("boyMovement", false);
+                ratAnim.SetBool("ratMovement", false);
+                theRB.velocity = new Vector2(0, theRB.velocity.y);             
             }
 
 
-            if ((Input.GetKey(jump) || value2 > 0) && isGrounded)
+        if ((Input.GetKey(jump) || value2 > 0) && isGrounded)
+        {
+            if (gameObject.tag == "Player")
             {
-                if (gameObject.tag == "Player")
-                {
-                    theRB.velocity = new Vector2(theRB.velocity.x, jumpForcePlayer);
-                }
-                if (gameObject.tag == "Rat")
-                {
-                    theRB.velocity = new Vector2(theRB.velocity.x, jumpForceRat);
-                }
+                boyAnim.SetBool("boyNotOnTheFloor", true);
+                theRB.velocity = new Vector2(theRB.velocity.x, jumpForcePlayer);
+
+
+            }
+            else if (gameObject.tag == "Rat")
+            {
+                ratAnim.SetBool("ratNotOnTheFloor", true);
+                theRB.velocity = new Vector2(theRB.velocity.x, jumpForceRat);
+
+
             }
 
-
+        }
+        else
+        {
+            boyAnim.SetBool("boyNotOnTheFloor", false);
+            ratAnim.SetBool("ratNotOnTheFloor", false);
+        }
 
             if (dead == false)
             {
-            if (paused == false)
-            {
-                if (theRB.velocity.x < 0)
+                if (paused == false)
                 {
-                    transform.localScale = new Vector3(-0.3f, 0.25f);
-                }
-                else if (theRB.velocity.x > 0)
-                {
-                    transform.localScale = new Vector3(0.3f, 0.25f);
-                }
-            }
+                    if (theRB.velocity.x < 0)
+                    {
+                      transform.localScale = new Vector3(-0.3f, 0.25f);
+                    }
+                    else if (theRB.velocity.x > 0)
+                    {
+                        transform.localScale = new Vector3(0.3f, 0.25f);
+                    }
+                }               
             }
         activeMenu();
+
            
         }
 
@@ -161,12 +179,13 @@ public class PlayerMovement : MonoBehaviour
             {
                 enemies.transform.GetChild(i).GetComponent<SimpleEnemy>().die(dead);
             }
+            GetComponent<SwapPlayer>().enabled = false;
             gameOverAnim.SetBool("isTrigger", true);
         }
     }
 
     void OnCollisionExit2D(Collision2D collision)
-        {
+    {
             //Parets colisio
             if (collision.gameObject.tag == "LeftWall")
             {
@@ -178,7 +197,8 @@ public class PlayerMovement : MonoBehaviour
             }
 
 
-        }
+    }
+
     public void activeMenu()
     {
         if (Input.GetKeyDown(KeyCode.P))
@@ -228,6 +248,8 @@ public class PlayerMovement : MonoBehaviour
         pausemenu.SetActive(false);
     }
 }
+
+
 
 
 

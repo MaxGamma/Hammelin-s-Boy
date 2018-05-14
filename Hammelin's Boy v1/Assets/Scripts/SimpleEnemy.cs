@@ -7,6 +7,8 @@ public class SimpleEnemy : MonoBehaviour {
     public int maxValue = 15; 
     public int minValue = -15;
 
+    public int speed;
+
     public int orientation = 0;
 
     private float currentValue = 1;
@@ -19,8 +21,8 @@ public class SimpleEnemy : MonoBehaviour {
     private bool deadPlayer = false;
 
     private bool paused = false;
-
     private RigidbodyConstraints2D originalConstraints;
+
     void Start ()
     {
         initialPosX = transform.position.x;
@@ -33,43 +35,43 @@ public class SimpleEnemy : MonoBehaviour {
         if (deadPlayer == false)
         {
             //Movement
-            if(paused == false) { 
-
-            currentValue += Time.deltaTime * direction;
-
-            if (currentValue >= maxValue)
+            if (paused == false)
             {
-                direction *= -1;
-                currentValue = maxValue;
-            }
+                currentValue += Time.deltaTime * direction * speed;
 
-            else if (currentValue <= minValue)
-            {
-                direction *= -1;
-                currentValue = minValue;
-            }
+                if (currentValue >= maxValue)
+                {
+                    direction *= -1;
+                    currentValue = maxValue;
+                }
 
-            //Horizontal
-            if (orientation == 0)
-            {
-                transform.position = new Vector3(currentValue + initialPosX, transform.position.y, 0);
-            }
-            else if (orientation == 1) //Vertical
-            {
-                transform.position = new Vector3(transform.position.x, currentValue + initialPosY, 0);
-            }
+                else if (currentValue <= minValue)
+                {
+                    direction *= -1;
+                    currentValue = minValue;
+                }
+
+                //Horizontal
+                if (orientation == 0)
+                {
+                    transform.position = new Vector3(currentValue + initialPosX, transform.position.y, 0);
+                }
+                else if (orientation == 1) //Vertical
+                {
+                    transform.position = new Vector3(transform.position.x, currentValue + initialPosY, 0);
+                }
 
 
-            //Flip
-            if (direction > 0)
-            {
-                transform.localScale = new Vector3(-0.3f, 0.3f);
+                //Flip
+                if (direction > 0)
+                {
+                    transform.localScale = new Vector3(-0.3f, 0.3f);
+                }
+                else if (direction < 0)
+                {
+                    transform.localScale = new Vector3(0.3f, 0.3f);
+                }
             }
-            else if (direction < 0)
-            {
-                transform.localScale = new Vector3(0.3f, 0.3f);
-            }
-        }
         }
         
     }
@@ -79,10 +81,11 @@ public class SimpleEnemy : MonoBehaviour {
         this.deadPlayer = deadPlayer;
         GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
     }
+
     public void reset(bool paused)
     {
         this.paused = paused;
-        if(paused == true)
+        if (paused == true)
         {
             GetComponent<Rigidbody2D>().constraints = originalConstraints;
         }

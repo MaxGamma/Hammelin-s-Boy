@@ -20,7 +20,9 @@ public class PlatformMovement : MonoBehaviour {
 
     private float initialPosX;
     private float initialPosY;
+
     private bool paused = false;
+
     void Start()
     {
         initialPosX = transform.position.x;
@@ -35,7 +37,6 @@ public class PlatformMovement : MonoBehaviour {
             //Movement
             if (paused == false)
             {
-
                 currentValue += Time.deltaTime * direction * speed;
 
                 if (currentValue >= maxValue)
@@ -59,18 +60,7 @@ public class PlatformMovement : MonoBehaviour {
                 {
                     transform.position = new Vector3(transform.position.x, currentValue + initialPosY, 0);
                 }
-
-
-                //Flip
-                if (direction > 0)
-                {
-                    transform.localScale = new Vector3(-0.5f, 0.5f);
-                }
-                else if (direction < 0)
-                {
-                    transform.localScale = new Vector3(0.5f, 0.5f);
-                }
-            }
+            } 
         }
         
     }
@@ -80,10 +70,11 @@ public class PlatformMovement : MonoBehaviour {
         this.deadPlayer = deadPlayer;
         GetComponent<Animator>().enabled = false;
     }
+
     public void reset(bool paused)
     {
         this.paused = paused;
-        if(paused == false)
+        if (paused == false)
         {
             GetComponent<Animator>().enabled = true;
         }
@@ -92,5 +83,6 @@ public class PlatformMovement : MonoBehaviour {
             GetComponent<Animator>().enabled = false;
         }
     }
+
 
 }

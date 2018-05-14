@@ -5,6 +5,7 @@ using UnityEngine;
 public class AvisosOut : MonoBehaviour {
 
     public GameObject aviso;
+    public Animator dialogueBox;
 
     void Start()
     {
@@ -17,9 +18,11 @@ public class AvisosOut : MonoBehaviour {
         aviso.GetComponent<Animator>().SetBool("isTrigger", false);
 
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        dialogueBox.SetBool("IsOpen", false);
 
     }
+}
     
 	
 	
-}
+
