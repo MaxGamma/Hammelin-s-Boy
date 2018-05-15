@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
 
     float value;
     float value2;
+    bool value3;
 
     private GameObject enemies;
     private GameObject platforms;
@@ -60,6 +61,7 @@ public class PlayerMovement : MonoBehaviour
 
         enemies = GameObject.Find("Enemies");
         platforms = GameObject.Find("Platforms");
+
     }
 	
 	// Update is called once per frame
@@ -67,8 +69,10 @@ public class PlayerMovement : MonoBehaviour
     {
             value = Input.GetAxis("Horizontal");
             value2 = Input.GetAxis("Jump");
+            value3 = Input.GetKeyDown("joystick button 7");
 
-            isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, groundCheckRadius, whatIsGround);
+
+        isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, groundCheckRadius, whatIsGround);
 
             if ((Input.GetKey(left) || value == -1) && touchingLeftWall == false)
             {
@@ -201,7 +205,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void activeMenu()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.P)|| value3)
         {
             if (pausemenu.activeInHierarchy == true)
             {
