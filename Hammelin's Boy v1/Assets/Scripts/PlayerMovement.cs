@@ -134,16 +134,16 @@ public class PlayerMovement : MonoBehaviour
             }
 
         }
-        else                                                  //Cambios para el planeador *
+        /*else                                                  //Cambios para el planeador *
         if ((Input.GetKey(jump) || value2 > 0))
         {
             theRB.gravityScale = 1.1f;
             moveSpeedPlayer = 10;
-        }
+        }*/
         else
         {
-            moveSpeedPlayer = 15;                            //*
-            theRB.gravityScale = 4.5f;
+            /*moveSpeedPlayer = 15;                            //*
+            theRB.gravityScale = 4.5f;*/
             boyAnim.SetBool("boyNotOnTheFloor", false);
             ratAnim.SetBool("ratNotOnTheFloor", false);
         }
