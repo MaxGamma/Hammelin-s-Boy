@@ -21,6 +21,8 @@ public class PlayerMovement : MonoBehaviour
 
     private GameObject enemies;
     private GameObject platforms;
+    private GameObject spikes;
+    private GameObject pendulum;
 
     private Rigidbody2D theRB;
 
@@ -61,7 +63,8 @@ public class PlayerMovement : MonoBehaviour
 
         enemies = GameObject.Find("Enemies");
         platforms = GameObject.Find("Platforms");
-
+        spikes = GameObject.Find("Spikes");
+        pendulum = GameObject.Find("Pendulum");
     }
 	
 	// Update is called once per frame
@@ -131,8 +134,16 @@ public class PlayerMovement : MonoBehaviour
             }
 
         }
+        else                                                  //Cambios para el planeador *
+        if ((Input.GetKey(jump) || value2 > 0))
+        {
+            theRB.gravityScale = 1.1f;
+            moveSpeedPlayer = 10;
+        }
         else
         {
+            moveSpeedPlayer = 15;                            //*
+            theRB.gravityScale = 4.5f;
             boyAnim.SetBool("boyNotOnTheFloor", false);
             ratAnim.SetBool("ratNotOnTheFloor", false);
         }
@@ -171,9 +182,12 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.tag == "Obstacle")
         {
             dead = true;
+            boyAnim.enabled = false;
             ratAnim.enabled = false;
             theRB.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
-
+            theRB.freezeRotation = true;
+            spikes.GetComponent<Spikes>().die(dead);
+            pendulum.GetComponent<Pendulum>().die(dead);
             for (int i = 0; i < platforms.transform.childCount; i++)
             {
                 platforms.transform.GetChild(i).GetComponent<PlatformMovement>().die(dead);
@@ -231,7 +245,7 @@ public class PlayerMovement : MonoBehaviour
                 ratAnim.enabled = false;
                 originalConstraints = theRB.constraints;
                 theRB.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
-
+                theRB.freezeRotation = true;
                 for (int i = 0; i < platforms.transform.childCount; i++)
                 {
                     platforms.transform.GetChild(i).GetComponent<PlatformMovement>().reset(paused);

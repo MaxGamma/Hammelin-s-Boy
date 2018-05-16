@@ -5,7 +5,8 @@ using UnityEngine;
 public class Spikes : MonoBehaviour {
 
     private CapsuleCollider2D capsule;
-
+    private bool deadPlayer = false;
+    private bool paused = false;
     void Start()
     {
         capsule = GetComponent<CapsuleCollider2D>();
@@ -19,5 +20,21 @@ public class Spikes : MonoBehaviour {
 
 
     }
-
+    public void die(bool deadPlayer)
+    {
+        this.deadPlayer = deadPlayer;
+        GetComponent<Animator>().enabled = false;
+    }
+    public void reset(bool paused)
+    {
+        this.paused = paused;
+        if (paused == false)
+        {
+            GetComponent<Animator>().enabled = true;
+        }
+        else
+        {
+            GetComponent<Animator>().enabled = false;
+        }
+    }
 }

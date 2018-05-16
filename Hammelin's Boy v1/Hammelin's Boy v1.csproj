@@ -236,6 +236,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Parallaxing.cs" />
+    <Compile Include="Assets\Pendulum.cs" />
     <Compile Include="Assets\Scripts\Avisos.cs" />
     <Compile Include="Assets\Scripts\AvisosOut.cs" />
     <Compile Include="Assets\Scripts\CameraPlayer.cs" />
