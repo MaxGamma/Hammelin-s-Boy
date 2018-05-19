@@ -23,10 +23,13 @@ public class SimpleEnemy : MonoBehaviour {
     private bool paused = false;
     private RigidbodyConstraints2D originalConstraints;
 
+    public Animator enemyAnim;
+
     void Start ()
     {
         initialPosX = transform.position.x;
         initialPosY = transform.position.y;
+        enemyAnim = GetComponent<Animator>();
     }
 	
 	
@@ -80,6 +83,7 @@ public class SimpleEnemy : MonoBehaviour {
     {
         this.deadPlayer = deadPlayer;
         GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+        enemyAnim.enabled = false;
     }
 
     public void reset(bool paused)
@@ -88,11 +92,13 @@ public class SimpleEnemy : MonoBehaviour {
         if (paused == true)
         {
             GetComponent<Rigidbody2D>().constraints = originalConstraints;
+            enemyAnim.enabled = true;
         }
         else
         {
             originalConstraints = GetComponent<Rigidbody2D>().constraints;
             GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+            enemyAnim.enabled = false;
         }
     }
 }
