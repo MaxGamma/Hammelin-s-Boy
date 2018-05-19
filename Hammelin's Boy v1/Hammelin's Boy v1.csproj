@@ -241,11 +241,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
-=======
-    <Compile Include="Assets\Parallaxing.cs" />
     <Compile Include="Assets\Pendulum.cs" />
->>>>>>> master
     <Compile Include="Assets\Scripts\Avisos.cs" />
     <Compile Include="Assets\Scripts\AvisosOut.cs" />
     <Compile Include="Assets\Scripts\CameraPlayer.cs" />

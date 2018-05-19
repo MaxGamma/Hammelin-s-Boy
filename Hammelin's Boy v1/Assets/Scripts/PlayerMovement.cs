@@ -120,35 +120,25 @@ public class PlayerMovement : MonoBehaviour
 
         if ((Input.GetKey(jump) || value2 > 0) && isGrounded)
         {
-            onGround = false;
-            if (gameObject.tag == "Player" && onGround == false)
+            if (gameObject.tag == "Player")
             {
                 boyAnim.SetBool("boyNotOnTheFloor", true);
                 theRB.velocity = new Vector2(theRB.velocity.x, jumpForcePlayer);
 
 
             }
-            else if (gameObject.tag == "Rat" && onGround == false)
+            else if (gameObject.tag == "Rat")
             {
                 ratAnim.SetBool("ratNotOnTheFloor", true);
                 theRB.velocity = new Vector2(theRB.velocity.x, jumpForceRat);
+
+
             }
 
         }
-<<<<<<< HEAD
-        else if(onGround == true)
-=======
-        /*else                                                  //Cambios para el planeador *
-        if ((Input.GetKey(jump) || value2 > 0))
+        else if(isGrounded)
         {
-            theRB.gravityScale = 1.1f;
-            moveSpeedPlayer = 10;
-        }*/
-        else
->>>>>>> master
-        {
-            /*moveSpeedPlayer = 15;                            //*
-            theRB.gravityScale = 4.5f;*/
+
             boyAnim.SetBool("boyNotOnTheFloor", false);
             ratAnim.SetBool("ratNotOnTheFloor", false);
         }
