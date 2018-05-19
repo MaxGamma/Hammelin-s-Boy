@@ -8,6 +8,8 @@ public class SwapPlayer : MonoBehaviour
 
     public Transform groundCheckPoint;
 
+    public GameObject particles;
+
     //Use this for getting the toggle data
 
     private BoxCollider2D box;
@@ -37,6 +39,10 @@ public class SwapPlayer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.RightShift) || value3)
         {
             changeSprite();
+            if (gameObject.tag == "Rat")
+            {
+                Instantiate(particles, new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z), Quaternion.identity);
+            }
 
         }
     }
@@ -50,7 +56,8 @@ public class SwapPlayer : MonoBehaviour
             box.enabled = false;
             capsule.enabled = true;
             gameObject.tag = "Rat";
-            
+            Instantiate(particles, player.transform.position, particles.transform.rotation);
+
         }
         else if (gameObject.tag == "Rat")
         {
@@ -59,7 +66,7 @@ public class SwapPlayer : MonoBehaviour
             box.enabled = true;
             capsule.enabled = false;
             gameObject.tag = "Player";
-            
+            Instantiate(particles, player.transform.position, particles.transform.rotation);
         }
     }
 

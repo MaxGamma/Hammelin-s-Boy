@@ -44,7 +44,8 @@ public class PlayerMovement : MonoBehaviour
 
     public GameObject pausemenu;
 
-    Stopwatch timer;
+
+    private bool onGround;
 
 
     // Use this for initialization
@@ -67,6 +68,7 @@ public class PlayerMovement : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        //distanceFloor = 
             value = Input.GetAxis("Horizontal");
             value2 = Input.GetAxis("Jump");
             value3 = Input.GetKeyDown("joystick button 7");
@@ -115,23 +117,22 @@ public class PlayerMovement : MonoBehaviour
 
         if ((Input.GetKey(jump) || value2 > 0) && isGrounded)
         {
-            if (gameObject.tag == "Player")
+            onGround = false;
+            if (gameObject.tag == "Player" && onGround == false)
             {
                 boyAnim.SetBool("boyNotOnTheFloor", true);
                 theRB.velocity = new Vector2(theRB.velocity.x, jumpForcePlayer);
 
 
             }
-            else if (gameObject.tag == "Rat")
+            else if (gameObject.tag == "Rat" && onGround == false)
             {
                 ratAnim.SetBool("ratNotOnTheFloor", true);
                 theRB.velocity = new Vector2(theRB.velocity.x, jumpForceRat);
-
-
             }
 
         }
-        else
+        else if(onGround == true)
         {
             boyAnim.SetBool("boyNotOnTheFloor", false);
             ratAnim.SetBool("ratNotOnTheFloor", false);
@@ -168,7 +169,12 @@ public class PlayerMovement : MonoBehaviour
             touchingRightWall = true;
         }
 
-        if (collision.gameObject.tag == "Obstacle")
+        if (collision.gameObject.tag == "Floor")
+        {
+            onGround = true;
+        }
+
+        if (collision.gameObject.tag == "Obstacle" || collision.gameObject.tag == "Enemy")
         {
             dead = true;
             ratAnim.enabled = false;
