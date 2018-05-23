@@ -12,7 +12,8 @@ public class StaticEnemy : MonoBehaviour {
 
     private float startTime;
 
-    public float time;
+    private float time;
+    public float changeTime;
 
     public bool eyesOn = true;
 
@@ -28,14 +29,14 @@ public class StaticEnemy : MonoBehaviour {
     {
         time = (Time.time - startTime) % 60;
 
-        if (time >= 3.0 && eyesOn == true)
+        if (time >= changeTime && eyesOn == true)
         {
             animator.SetBool("EyesOn", false);
             box.enabled = false;
             eyesOn = false;
             startTime = Time.time;
         }
-        else if(time >= 3.0 && eyesOn == false)
+        else if(time >= changeTime && eyesOn == false)
         {
             animator.SetBool("EyesOn", true);
             box.enabled = true;
