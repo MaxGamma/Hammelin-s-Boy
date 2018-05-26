@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Parallaxing : MonoBehaviour {
+public class Parallaxing : MonoBehaviour
+{
     public Transform[] backgrounds;
     private float[] parallaxScales;
     public float smoothing = 1f;
@@ -13,8 +14,9 @@ public class Parallaxing : MonoBehaviour {
     {
         cam = Camera.main.transform;
     }
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         previousCamPos = cam.position;
         parallaxScales = new float[backgrounds.Length];
         for (int i = 0; i < backgrounds.Length; i++)
@@ -22,15 +24,18 @@ public class Parallaxing : MonoBehaviour {
             parallaxScales[i] = backgrounds[i].position.z * -1;
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         for (int i = 0; i < backgrounds.Length; i++)
         {
-            float parallax = (previousCamPos.x - cam.position.x) * parallaxScales[i];
-            float backgroundTargetPosX = backgrounds[i].position.x + parallax;
-            Vector3 backgroundTargetPos = new Vector3(backgroundTargetPosX, backgrounds[i].position.y, backgrounds[i].position.z);
-            backgrounds[i].position = Vector3.Lerp(backgrounds[i].position, backgroundTargetPos,smoothing * Time.deltaTime);
+            float parallaxX = (previousCamPos.x - cam.position.x) * parallaxScales[i];
+            float parallaxY = (previousCamPos.y - cam.position.y) * parallaxScales[i];
+            float backgroundTargetPosX = backgrounds[i].position.x + parallaxX;
+            float backgroundTargetPosY = backgrounds[i].position.y + parallaxY;
+            Vector3 backgroundTargetPos = new Vector3(backgroundTargetPosX, backgroundTargetPosY, backgrounds[i].position.z);
+            backgrounds[i].position = Vector3.Lerp(backgrounds[i].position, backgroundTargetPos, smoothing * Time.deltaTime);
         }
         previousCamPos = cam.position;
     }
