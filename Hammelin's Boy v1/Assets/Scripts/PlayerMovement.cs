@@ -66,6 +66,9 @@ public class PlayerMovement : MonoBehaviour
         platforms = GameObject.Find("Platforms");
         spikes = GameObject.Find("Spikes");
         pendulum = GameObject.Find("Pendulum");
+
+        boyAnim.SetBool("killed", false);
+        ratAnim.SetBool("killed", false);
     }
 	
 	// Update is called once per frame
@@ -79,7 +82,14 @@ public class PlayerMovement : MonoBehaviour
 
         isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, groundCheckRadius, whatIsGround);
 
-            if ((Input.GetKey(left) || value == -1) && touchingLeftWall == false)
+        if (!isGrounded)
+        {
+
+            boyAnim.SetBool("boyNotOnTheFloor", true);
+            ratAnim.SetBool("ratNotOnTheFloor", true);
+        }
+
+        if ((Input.GetKey(left) || value == -1) && touchingLeftWall == false)
             {
                 if (gameObject.tag == "Player")
                 {
@@ -182,8 +192,8 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.tag == "Obstacle" || collision.gameObject.tag == "Enemy")
         {
             dead = true;
-            boyAnim.enabled = false;
-            ratAnim.enabled = false;
+            boyAnim.SetBool("killed", true);
+            ratAnim.SetBool("killed", true);
             theRB.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
             theRB.freezeRotation = true;
             spikes.GetComponent<Spikes>().die(dead);
