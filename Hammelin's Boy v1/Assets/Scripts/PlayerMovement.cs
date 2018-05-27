@@ -49,6 +49,14 @@ public class PlayerMovement : MonoBehaviour
 
     private bool onGround;
 
+    public float dashSpeed;
+
+    public int direction = 2;
+
+    public DashState dashState;
+    public float dashTimer;
+    public float maxDash = 20f;
+
 
     // Use this for initialization
     void Start ()
@@ -93,11 +101,13 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (gameObject.tag == "Player")
                 {
+                    direction = 1;
                     boyAnim.SetBool("boyMovement", true);
                     theRB.velocity = new Vector2(-moveSpeedPlayer, theRB.velocity.y);
                 }
                 if (gameObject.tag == "Rat")
                 {
+                    direction = 1;
                     ratAnim.SetBool("ratMovement", true);
                     theRB.velocity = new Vector2(-moveSpeedRat, theRB.velocity.y);
                 }
@@ -108,12 +118,14 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (gameObject.tag == "Player")
                 {
+                    direction = 2;
                     boyAnim.SetBool("boyMovement", true);
                     theRB.velocity = new Vector2(moveSpeedPlayer, theRB.velocity.y);
                     
                 }
                 if (gameObject.tag == "Rat")
                 {
+                    direction = 2;
                     ratAnim.SetBool("ratMovement", true);
                     theRB.velocity = new Vector2(moveSpeedRat, theRB.velocity.y);
                 }
@@ -127,6 +139,54 @@ public class PlayerMovement : MonoBehaviour
                 theRB.velocity = new Vector2(0, theRB.velocity.y);             
             }
 
+
+        switch (dashState)
+        {
+            case DashState.Ready:
+
+                if (Input.GetKey(KeyCode.K))
+                {
+                    dashState = DashState.Dashing;
+                }
+                break;
+
+            case DashState.Dashing:
+                dashTimer += Time.deltaTime * 3;
+                if (dashTimer >= maxDash)
+                {
+                    dashTimer = maxDash;
+
+                    if (direction == 1)
+                    {
+                        ratAnim.SetBool("Dashing", true);
+                        boyAnim.SetBool("Dashing", true);
+                        theRB.velocity = Vector2.left * dashSpeed;
+                    }
+                    else if (direction == 2)
+                    {
+                        ratAnim.SetBool("Dashing", true);
+                        boyAnim.SetBool("Dashing", true);
+                        theRB.velocity = Vector2.right * dashSpeed;
+                    }
+
+                    dashState = DashState.Cooldown;
+                }
+                break;
+            case DashState.Cooldown:
+                dashTimer -= Time.deltaTime;
+                boyAnim.SetBool("Dashing", false);
+                ratAnim.SetBool("Dashing", false);
+
+                if (dashTimer <= 0)
+                { 
+                    dashTimer = 0;
+                    dashState = DashState.Ready;                   
+                }
+                break;
+        }
+
+
+    
 
         if ((Input.GetKey(jump) || value2 > 0) && isGrounded)
         {
@@ -274,6 +334,13 @@ public class PlayerMovement : MonoBehaviour
     public void continueButton()
     {
         pausemenu.SetActive(false);
+    }
+
+    public enum DashState
+    {
+        Ready,
+        Dashing,
+        Cooldown
     }
 }
 
