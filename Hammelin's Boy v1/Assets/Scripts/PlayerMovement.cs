@@ -6,6 +6,11 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public AudioSource musicSource;
+    public AudioSource moveSource;
+    public AudioClip jumpSound;
+    public AudioClip moveSound;
+
     public float moveSpeedPlayer;
     public float moveSpeedRat;
     public float jumpForcePlayer;
@@ -90,13 +95,15 @@ public class PlayerMovement : MonoBehaviour
 
         boyAnim.SetBool("killed", false);
         ratAnim.SetBool("killed", false);
+
+        moveSource.clip = moveSound;
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
         //distanceFloor = 
-            value = Input.GetAxis("Horizontal");
+        value = Input.GetAxis("Horizontal");
             value2 = Input.GetAxis("Jump");
             value3 = Input.GetKeyDown("joystick button 7");
 
@@ -112,6 +119,9 @@ public class PlayerMovement : MonoBehaviour
 
         if ((Input.GetKey(left) || value == -1) && touchingLeftWall == false)
             {
+                
+                moveSource.Play();
+
                 if (gameObject.tag == "Player")
                 {
                     direction = 1;
@@ -126,9 +136,15 @@ public class PlayerMovement : MonoBehaviour
                 }
 
                 touchingRightWall = false;
-            }
+
+           
+                
+
+        }
             else if ((Input.GetKey(right) || value == 1) && touchingRightWall == false)
             {
+                
+                moveSource.Play();
                 if (gameObject.tag == "Player")
                 {
                     direction = 2;
@@ -144,7 +160,8 @@ public class PlayerMovement : MonoBehaviour
                 }
 
                 touchingRightWall = false;
-            }
+                
+        }
             else
             {
                 boyAnim.SetBool("boyMovement", false);
@@ -160,6 +177,8 @@ public class PlayerMovement : MonoBehaviour
 
         if ((Input.GetKey(jump) || value2 > 0) && isGrounded)
         {
+            musicSource.clip = jumpSound;
+            musicSource.Play();
             if (gameObject.tag == "Player")
             {
                 boyAnim.SetBool("boyNotOnTheFloor", true);
@@ -172,9 +191,9 @@ public class PlayerMovement : MonoBehaviour
                 ratAnim.SetBool("ratNotOnTheFloor", true);
                 theRB.velocity = new Vector2(theRB.velocity.x, jumpForceRat);
 
-
+            
             }
-
+            
         }
         else if(isGrounded)
         {
@@ -202,7 +221,7 @@ public class PlayerMovement : MonoBehaviour
         {
             GameObject.Find("DialogueManager").GetComponent<DialogueManager>().DisplayNextSentence();
         }
-
+        
     }
 
     void OnCollisionEnter2D(Collision2D collision)

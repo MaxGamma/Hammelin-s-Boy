@@ -5,8 +5,11 @@ public class SwapPlayer : MonoBehaviour
     //Attach these in the Inspector
     public GameObject player;
     public GameObject rat;
-
+    
     public Transform groundCheckPoint;
+
+    public AudioSource musicSource;
+    public AudioClip changeSound;
 
     public GameObject particles;
 
@@ -45,6 +48,8 @@ public class SwapPlayer : MonoBehaviour
 
     void changeSprite()
     {
+        musicSource.clip = changeSound;
+        musicSource.Play();
         if (gameObject.tag == "Player")
         {
             ratSprite.enabled = true;
