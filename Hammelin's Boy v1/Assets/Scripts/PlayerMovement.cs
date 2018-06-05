@@ -214,7 +214,83 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.tag == "Ending")
         {
             gameEnding.SetBool("isTrigger", true);
-        }
+            dead = true;
+
+            boyAnim.enabled = true;
+            ratAnim.enabled = true;
+
+            boyAnim.SetBool("killed", true);
+            ratAnim.SetBool("killed", true);
+
+            theRB.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+            theRB.freezeRotation = true;
+            for(int i = 0; i < spikes.transform.childCount; i++)
+            {
+                spikes.transform.GetChild(i).GetComponent<Spikes>().die(dead);
+            }
+            for(int i = 0; i < pendulum.transform.childCount; i++)
+            {
+                pendulum.transform.GetChild(i).GetComponent<Pendulum>().die(dead);
+            }
+            if (GameObject.Find("Platforms").transform.childCount == 2)
+            {
+                for (int i = 0; i < normal.transform.childCount; i++)
+                {
+                    normal.transform.GetChild(i).GetComponent<PlatformMovement>().die(dead);
+                }
+                for (int i = 0; i < gravity.transform.childCount; i++)
+                {
+                    gravity.transform.GetChild(i).GetComponent<GravityMovement>().die(dead);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < platforms.transform.childCount; i++)
+                {
+                    platforms.transform.GetChild(i).GetComponent<PlatformMovement>().die(dead);
+                }
+            }
+            for (int i = 0; i < enemies.transform.childCount; i++)
+            {
+                if (enemies.transform.GetChild(i).name == "Static")
+                {
+                    for (int j = 0; j < enemies.transform.GetChild(i).transform.childCount; j++)
+                    {
+                        enemies.transform.GetChild(i).transform.GetChild(j).GetComponent<StaticEnemy>().die(dead);
+                    }
+                }
+                if (enemies.transform.GetChild(i).name == "Simple")
+                {
+                    for (int j = 0; j < enemies.transform.GetChild(i).transform.childCount; j++)
+                    {
+                        enemies.transform.GetChild(i).transform.GetChild(j).GetComponent<SimpleEnemy>().die(dead); ;
+                    }
+                }
+                if (enemies.transform.GetChild(i).GetComponent<SimpleEnemy>() != null)
+                {
+                    enemies.transform.GetChild(i).GetComponent<SimpleEnemy>().die(dead);
+                }
+                else
+                    if (enemies.transform.GetChild(i).GetComponent<StaticEnemy>() != null)
+                {
+                    enemies.transform.GetChild(i).GetComponent<StaticEnemy>().die(dead);
+                }
+            }
+            if(rocks!= null)
+            {
+                for (int i = 0; i < rocks.transform.childCount; i++)
+                {
+                    rocks.transform.GetChild(i).GetComponent<RockSystem>().die(dead);
+                }
+            }
+            GetComponent<SwapPlayer>().enabled = false;
+            if(Input.GetKeyDown("joystick button 0"))
+            {
+                SceneManager.LoadScene("Main_Menu");
+            }
+
+
+        }        
         //Parets colisio
         if (collision.gameObject.tag == "LeftWall")
         {
@@ -277,6 +353,13 @@ public class PlayerMovement : MonoBehaviour
                         enemies.transform.GetChild(i).transform.GetChild(j).GetComponent<StaticEnemy>().die(dead);
                     }
                 }
+                if (enemies.transform.GetChild(i).name == "Simple")
+                {
+                    for (int j = 0; j < enemies.transform.GetChild(i).transform.childCount; j++)
+                    {
+                        enemies.transform.GetChild(i).transform.GetChild(j).GetComponent<SimpleEnemy>().die(dead); ;
+                    }
+                }
                 if (enemies.transform.GetChild(i).GetComponent<SimpleEnemy>() != null)
                 {
                     enemies.transform.GetChild(i).GetComponent<SimpleEnemy>().die(dead);
@@ -296,7 +379,7 @@ public class PlayerMovement : MonoBehaviour
             }
             GetComponent<SwapPlayer>().enabled = false;
             gameOverAnim.SetBool("isTrigger", true);
-            
+
         }
     }
 
