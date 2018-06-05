@@ -43,8 +43,9 @@ public class PlayerMovement : MonoBehaviour
     public Animator gameOverAnim;
     public Animator gameEnding;
     public bool dead = false;
-
     private bool paused = false;
+    public bool end = false;
+
     private RigidbodyConstraints2D originalConstraints;
 
     public GameObject pausemenu;
@@ -284,10 +285,7 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
             GetComponent<SwapPlayer>().enabled = false;
-            if(Input.GetKeyDown("joystick button 0"))
-            {
-                SceneManager.LoadScene("Main_Menu");
-            }
+            end = true;
 
 
         }        

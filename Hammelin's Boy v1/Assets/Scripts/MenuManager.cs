@@ -82,6 +82,12 @@ public class MenuManager : MonoBehaviour {
                 MainMenu();
             }
         }
+       if(GameObject.Find("Player").GetComponent<PlayerMovement>().end == true){
+            if (Input.GetKeyDown("joystick button 0"))
+            {
+                SceneManager.LoadScene("Main_Menu");
+            }
+        }
     }
 
 

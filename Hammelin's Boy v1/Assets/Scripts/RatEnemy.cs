@@ -4,17 +4,12 @@ using UnityEngine;
 
 public class RatEnemy: MonoBehaviour
 {
-
     public int maxValue = 15;
     public int minValue = -15;
-    public bool contacte = false;
-
-    private GameObject ratsos;
 
     public int speed;
 
     public int orientation = 0;
-    private GameObject PlayerYou;
 
     private float currentValue = 1;
 
@@ -29,17 +24,11 @@ public class RatEnemy: MonoBehaviour
     private RigidbodyConstraints2D originalConstraints;
     private Rigidbody2D rigidRat;
 
-
-    public Animator enemyAnim;
-
     void Start()
     {
         initialPosX = transform.position.x;
         initialPosY = transform.position.y;
-        enemyAnim = GetComponent<Animator>();
-        PlayerYou = GameObject.Find("Player");
         rigidRat = GetComponent<Rigidbody2D>();
-        ratsos = GameObject.Find("Ratsos");
     }
 
 
@@ -69,10 +58,6 @@ public class RatEnemy: MonoBehaviour
                 {
                     transform.position = new Vector3(currentValue + initialPosX, transform.position.y, 0);
                 }
-                else if (orientation == 1) //Vertical
-                {
-                    transform.position = new Vector3(transform.position.x, currentValue + initialPosY, 0);
-                }
 
 
                 //Flip
@@ -90,39 +75,16 @@ public class RatEnemy: MonoBehaviour
 
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    public void autoDestroy()
     {
-        
-        
-        if (collision.gameObject.tag == "Player" && PlayerYou.GetComponent<Rigidbody2D>().position.y >= rigidRat.position.y)
-            {
-            contacte = true;
-            //Destroy(this);
-            Destroy(this);
-
-            }
-        else
-        if (collision.gameObject.tag == "Player")
-        {
-            Debug.Log("Es el collider");
-        }
-        else
-        if(PlayerYou.GetComponent<Rigidbody2D>().position.y <= rigidRat.position.y)
-        {
-            Debug.Log("Es la posicion");
-        }
-
-
+        Destroy(gameObject);
     }
 
-
-
-public void die(bool deadPlayer)
-    {
-        this.deadPlayer = deadPlayer;
-        GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
-        enemyAnim.enabled = false;
-    }
+        public void die(bool deadPlayer)
+        {
+            this.deadPlayer = deadPlayer;
+            GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+        }
 
     public void reset(bool paused)
     {
@@ -130,13 +92,11 @@ public void die(bool deadPlayer)
         if (paused == false)
         {
             GetComponent<Rigidbody2D>().constraints = originalConstraints;
-            enemyAnim.enabled = true;
         }
         else
         {
             originalConstraints = GetComponent<Rigidbody2D>().constraints;
             GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
-            enemyAnim.enabled = false;
         }
     }
 }
