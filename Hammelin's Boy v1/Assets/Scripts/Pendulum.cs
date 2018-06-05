@@ -19,19 +19,22 @@ public class Pendulum : MonoBehaviour {
     {
         this.deadPlayer = deadPlayer;
         GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+        GetComponent<Animator>().enabled = false;
     }
 
     public void reset(bool paused)
     {
         this.paused = paused;
-        if (paused == true)
+        if (paused == false)
         {
             GetComponent<Rigidbody2D>().constraints = originalConstraints;
+            GetComponent<Animator>().enabled = true;
         }
         else
         {
             originalConstraints = GetComponent<Rigidbody2D>().constraints;
             GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+            GetComponent<Animator>().enabled = false;
         }
     }
 }

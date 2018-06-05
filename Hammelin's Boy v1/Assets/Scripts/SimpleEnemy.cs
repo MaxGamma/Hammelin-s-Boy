@@ -89,7 +89,7 @@ public class SimpleEnemy : MonoBehaviour {
     public void reset(bool paused)
     {
         this.paused = paused;
-        if (paused == true)
+        if (paused == false)
         {
             GetComponent<Rigidbody2D>().constraints = originalConstraints;
             enemyAnim.enabled = true;

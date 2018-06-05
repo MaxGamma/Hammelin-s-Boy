@@ -35,15 +35,17 @@ public class DialogueManager : MonoBehaviour {
 
 	public void DisplayNextSentence ()
 	{
-		if (sentences.Count == 0)
-		{
-			EndDialogue();
-			return;
-		}
+        
+            if (sentences.Count == 0)
+            {
+                EndDialogue();
+                return;
+            }
 
-		string sentence = sentences.Dequeue();
-		StopAllCoroutines();
-		StartCoroutine(TypeSentence(sentence));
+            string sentence = sentences.Dequeue();
+            StopAllCoroutines();
+            StartCoroutine(TypeSentence(sentence));
+        
 	}
 
 	IEnumerator TypeSentence (string sentence)
@@ -59,7 +61,6 @@ public class DialogueManager : MonoBehaviour {
 	void EndDialogue()
 	{
 		animator.SetBool("IsOpen", false);
-
 	}
 
 }

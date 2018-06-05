@@ -13,9 +13,13 @@ public class StaticEnemy : MonoBehaviour {
     private float startTime;
 
     private float time;
-    public float changeTime;
+    public float changeTimeEyesOn;
+    public float changeTimeEyesOff;
 
     public bool eyesOn = true;
+
+    private bool deadPlayer = false;
+    private bool paused = false;
 
     void Start ()
     {
@@ -27,21 +31,44 @@ public class StaticEnemy : MonoBehaviour {
 	
 	void Update ()
     {
-        time = (Time.time - startTime) % 60;
+        if (deadPlayer == false)
+        {
+            if (paused == false)
+            {
+                time = (Time.time - startTime) % 60;
 
-        if (time >= changeTime && eyesOn == true)
-        {
-            animator.SetBool("EyesOn", false);
-            box.enabled = false;
-            eyesOn = false;
-            startTime = Time.time;
-        }
-        else if(time >= changeTime && eyesOn == false)
-        {
-            animator.SetBool("EyesOn", true);
-            box.enabled = true;
-            eyesOn = true;
-            startTime = Time.time;
+                if (time >= changeTimeEyesOn && eyesOn == true)
+                {
+                    animator.SetBool("EyesOn", false);
+                    box.enabled = false;
+                    eyesOn = false;
+                    startTime = Time.time;
+                }
+                else if (time >= changeTimeEyesOff && eyesOn == false)
+                {
+                    animator.SetBool("EyesOn", true);
+                    box.enabled = true;
+                    eyesOn = true;
+                    startTime = Time.time;
+                }
+            }
         }
 	}
+    public void die(bool deadPlayer)
+    {
+        this.deadPlayer = deadPlayer;
+        GetComponent<Animator>().enabled = false;
+    }
+    public void reset(bool paused)
+    {
+        this.paused = paused;
+        if (paused == false)
+        {
+            GetComponent<Animator>().enabled = true;
+        }
+        else
+        {
+            GetComponent<Animator>().enabled = false;
+        }
+    }
 }

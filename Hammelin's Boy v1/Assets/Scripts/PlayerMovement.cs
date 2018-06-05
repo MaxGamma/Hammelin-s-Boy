@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -23,7 +23,10 @@ public class PlayerMovement : MonoBehaviour
     private GameObject platforms;
     private GameObject spikes;
     private GameObject pendulum;
-
+    private GameObject obstacles;
+    private GameObject normal;
+    private GameObject gravity;
+    private GameObject rocks;
     private Rigidbody2D theRB;
 
     public Transform groundCheckPoint;
@@ -38,24 +41,21 @@ public class PlayerMovement : MonoBehaviour
     public Animator boyAnim;
     public Animator ratAnim;
     public Animator gameOverAnim;
-
+    public Animator gameEnding;
     public bool dead = false;
 
     private bool paused = false;
     private RigidbodyConstraints2D originalConstraints;
 
     public GameObject pausemenu;
+    public bool contin = false;
 
+    public bool onGround;
 
-    private bool onGround;
-
-    public float dashSpeed;
-
+ 
     public int direction = 2;
 
-    public DashState dashState;
-    public float dashTimer;
-    public float maxDash = 20f;
+
 
 
     // Use this for initialization
@@ -66,14 +66,26 @@ public class PlayerMovement : MonoBehaviour
         boyAnim = boyAnim.GetComponent<Animator>();
         ratAnim = ratAnim.GetComponent<Animator>();
         gameOverAnim = gameOverAnim.GetComponent<Animator>();
+        gameEnding = gameEnding.GetComponent<Animator>();
 
         touchingLeftWall = false;
         touchingRightWall = false;
 
         enemies = GameObject.Find("Enemies");
-        platforms = GameObject.Find("Platforms");
-        spikes = GameObject.Find("Spikes");
-        pendulum = GameObject.Find("Pendulum");
+        if(GameObject.Find("Platforms").transform.childCount == 2)
+        {
+            normal = GameObject.Find("Platforms").transform.GetChild(0).gameObject;
+            gravity = GameObject.Find("Platforms").transform.GetChild(1).gameObject;
+
+        }
+        else
+        {
+            platforms = GameObject.Find("Platforms");
+        }
+        obstacles = GameObject.Find("Obstacles");
+        spikes =  obstacles.transform.GetChild(0).gameObject;
+        rocks = GameObject.Find("Rocks");
+        pendulum = obstacles.transform.GetChild(1).gameObject;
 
         boyAnim.SetBool("killed", false);
         ratAnim.SetBool("killed", false);
@@ -140,50 +152,7 @@ public class PlayerMovement : MonoBehaviour
             }
 
 
-        switch (dashState)
-        {
-            case DashState.Ready:
-
-                if (Input.GetKey(KeyCode.K))
-                {
-                    dashState = DashState.Dashing;
-                }
-                break;
-
-            case DashState.Dashing:
-                dashTimer += Time.deltaTime * 3;
-                if (dashTimer >= maxDash)
-                {
-                    dashTimer = maxDash;
-
-                    if (direction == 1)
-                    {
-                        ratAnim.SetBool("Dashing", true);
-                        boyAnim.SetBool("Dashing", true);
-                        theRB.velocity = Vector2.left * dashSpeed;
-                    }
-                    else if (direction == 2)
-                    {
-                        ratAnim.SetBool("Dashing", true);
-                        boyAnim.SetBool("Dashing", true);
-                        theRB.velocity = Vector2.right * dashSpeed;
-                    }
-
-                    dashState = DashState.Cooldown;
-                }
-                break;
-            case DashState.Cooldown:
-                dashTimer -= Time.deltaTime;
-                boyAnim.SetBool("Dashing", false);
-                ratAnim.SetBool("Dashing", false);
-
-                if (dashTimer <= 0)
-                { 
-                    dashTimer = 0;
-                    dashState = DashState.Ready;                   
-                }
-                break;
-        }
+       
 
 
     
@@ -234,6 +203,15 @@ public class PlayerMovement : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.gameObject.tag == "NextLevel")
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+
+        if (collision.gameObject.tag == "Ending")
+        {
+            gameEnding.SetBool("isTrigger", true);
+        }
         //Parets colisio
         if (collision.gameObject.tag == "LeftWall")
         {
@@ -252,23 +230,67 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.tag == "Obstacle" || collision.gameObject.tag == "Enemy")
         {
             dead = true;
+
+            boyAnim.enabled = true;
+            ratAnim.enabled = true;
+
             boyAnim.SetBool("killed", true);
             ratAnim.SetBool("killed", true);
+
             theRB.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
             theRB.freezeRotation = true;
-            spikes.GetComponent<Spikes>().die(dead);
-            pendulum.GetComponent<Pendulum>().die(dead);
-            for (int i = 0; i < platforms.transform.childCount; i++)
+            for(int i = 0; i < spikes.transform.childCount; i++)
             {
-                platforms.transform.GetChild(i).GetComponent<PlatformMovement>().die(dead);
+                spikes.transform.GetChild(i).GetComponent<Spikes>().die(dead);
             }
-
+            for(int i = 0; i < pendulum.transform.childCount; i++)
+            {
+                pendulum.transform.GetChild(i).GetComponent<Pendulum>().die(dead);
+            }
+            if (GameObject.Find("Platforms").transform.childCount == 2)
+            {
+                for (int i = 0; i < normal.transform.childCount; i++)
+                {
+                    normal.transform.GetChild(i).GetComponent<PlatformMovement>().die(dead);
+                }
+                for (int i = 0; i < gravity.transform.childCount; i++)
+                {
+                    gravity.transform.GetChild(i).GetComponent<GravityMovement>().die(dead);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < platforms.transform.childCount; i++)
+                {
+                    platforms.transform.GetChild(i).GetComponent<PlatformMovement>().die(dead);
+                }
+            }
             for (int i = 0; i < enemies.transform.childCount; i++)
             {
-                enemies.transform.GetChild(i).GetComponent<SimpleEnemy>().die(dead);
+                if (enemies.transform.GetChild(i).name == "Static")
+                {
+                    for (int j = 0; j < enemies.transform.GetChild(i).transform.childCount; j++)
+                    {
+                        enemies.transform.GetChild(i).transform.GetChild(j).GetComponent<StaticEnemy>().die(dead);
+                    }
+                }
+                if (enemies.transform.GetChild(i).GetComponent<SimpleEnemy>() != null)
+                {
+                    enemies.transform.GetChild(i).GetComponent<SimpleEnemy>().die(dead);
+                }
+                else
+                    if (enemies.transform.GetChild(i).GetComponent<StaticEnemy>() != null)
+                {
+                    enemies.transform.GetChild(i).GetComponent<StaticEnemy>().die(dead);
+                }
+            }
+            if(rocks!= null)
+            {
+                rocks.GetComponent<RockSystem>().die(dead);
             }
             GetComponent<SwapPlayer>().enabled = false;
             gameOverAnim.SetBool("isTrigger", true);
+            
         }
     }
 
@@ -289,22 +311,122 @@ public class PlayerMovement : MonoBehaviour
 
     public void activeMenu()
     {
-        if (Input.GetKeyDown(KeyCode.P)|| value3)
+        if(contin == true)
         {
-            if (pausemenu.activeInHierarchy == true)
+            paused = false;
+            boyAnim.enabled = true;
+            ratAnim.enabled = true;
+            theRB.constraints = originalConstraints;
+            for (int i = 0; i < spikes.transform.childCount; i++)
             {
-                paused = false;
-                ratAnim.enabled = true;
-                theRB.constraints = originalConstraints;
-
+                spikes.transform.GetChild(i).GetComponent<Spikes>().reset(paused);
+            }
+            for (int i = 0; i < pendulum.transform.childCount; i++)
+            {
+                pendulum.transform.GetChild(i).GetComponent<Pendulum>().reset(paused);
+            }
+            if (GameObject.Find("Platforms").transform.childCount == 2)
+            {
+                for (int i = 0; i < normal.transform.childCount; i++)
+                {
+                    normal.transform.GetChild(i).GetComponent<PlatformMovement>().reset(paused);
+                }
+                for (int i = 0; i < gravity.transform.childCount; i++)
+                {
+                    gravity.transform.GetChild(i).GetComponent<GravityMovement>().reset(paused);
+                }
+            }
+            else
+            {
                 for (int i = 0; i < platforms.transform.childCount; i++)
                 {
                     platforms.transform.GetChild(i).GetComponent<PlatformMovement>().reset(paused);
                 }
+            }
+            for (int i = 0; i < enemies.transform.childCount; i++)
+            {
+                if(enemies.transform.GetChild(i).name == "Static")
+                {
+                    for(int j = 0; j < enemies.transform.GetChild(i).transform.childCount; j++)
+                    {
+                        enemies.transform.GetChild(i).transform.GetChild(j).GetComponent<StaticEnemy>().reset(paused);
+                    }
+                }
+                if (enemies.transform.GetChild(i).GetComponent<SimpleEnemy>() != null)
+                {
+                    enemies.transform.GetChild(i).GetComponent<SimpleEnemy>().reset(paused);
+                }
+                else
+                if (enemies.transform.GetChild(i).GetComponent<StaticEnemy>() != null)
+                {
+                    enemies.transform.GetChild(i).GetComponent<StaticEnemy>().reset(paused);
+                }
+            }
+            if (rocks != null)
+            {
+                rocks.GetComponent<RockSystem>().reset(paused);
+            }
+            GetComponent<SwapPlayer>().enabled = true;
+            pausemenu.SetActive(false);
+            contin = false;
+        }
+        if (Input.GetKeyDown(KeyCode.P) || value3)
+        {
+            if (pausemenu.activeInHierarchy == true)
+            {
+                paused = false;
+                boyAnim.enabled = true;
+                ratAnim.enabled = true;
+                theRB.constraints = originalConstraints;
+                for (int i = 0; i < spikes.transform.childCount; i++)
+                {
+                    spikes.transform.GetChild(i).GetComponent<Spikes>().reset(paused);
+                }
+                for (int i = 0; i < pendulum.transform.childCount; i++)
+                {
+                    pendulum.transform.GetChild(i).GetComponent<Pendulum>().reset(paused);
+                }
+                if (GameObject.Find("Platforms").transform.childCount == 2)
+                {
+                    for (int i = 0; i < normal.transform.childCount; i++)
+                    {
+                        normal.transform.GetChild(i).GetComponent<PlatformMovement>().reset(paused);
+                    }
+                    for (int i = 0; i < gravity.transform.childCount; i++)
+                    {
+                        gravity.transform.GetChild(i).GetComponent<GravityMovement>().reset(paused);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < platforms.transform.childCount; i++)
+                    {
+                        platforms.transform.GetChild(i).GetComponent<PlatformMovement>().reset(paused);
+                    }
+                }
 
                 for (int i = 0; i < enemies.transform.childCount; i++)
                 {
-                    enemies.transform.GetChild(i).GetComponent<SimpleEnemy>().reset(paused);
+                    if (enemies.transform.GetChild(i).name == "Static")
+                    {
+                        for (int j = 0; j < enemies.transform.GetChild(i).transform.childCount; j++)
+                        {
+                            enemies.transform.GetChild(i).transform.GetChild(j).GetComponent<StaticEnemy>().reset(paused);
+                        }
+                    }
+                    if (enemies.transform.GetChild(i).GetComponent<SimpleEnemy>() != null)
+                    {
+                        enemies.transform.GetChild(i).GetComponent<SimpleEnemy>().reset(paused);
+                    }
+                    else
+                    if (enemies.transform.GetChild(i).GetComponent<StaticEnemy>() != null)
+                    {
+                        enemies.transform.GetChild(i).GetComponent<StaticEnemy>().reset(paused);
+                    }
+                }
+                if (rocks != null)
+                {
+                    rocks.GetComponent<RockSystem>().reset(paused);
                 }
                 GetComponent<SwapPlayer>().enabled = true;
                 pausemenu.SetActive(false);
@@ -312,18 +434,60 @@ public class PlayerMovement : MonoBehaviour
             else if (pausemenu.activeInHierarchy == false)
             {
                 paused = true;
+                boyAnim.enabled = false;
                 ratAnim.enabled = false;
                 originalConstraints = theRB.constraints;
                 theRB.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
                 theRB.freezeRotation = true;
-                for (int i = 0; i < platforms.transform.childCount; i++)
+                for (int i = 0; i < spikes.transform.childCount; i++)
                 {
-                    platforms.transform.GetChild(i).GetComponent<PlatformMovement>().reset(paused);
+                    spikes.transform.GetChild(i).GetComponent<Spikes>().reset(paused);
+                }
+                for (int i = 0; i < pendulum.transform.childCount; i++)
+                {
+                    pendulum.transform.GetChild(i).GetComponent<Pendulum>().reset(paused);
+                }
+                if (GameObject.Find("Platforms").transform.childCount == 2)
+                {
+                    for (int i = 0; i < normal.transform.childCount; i++)
+                    {
+                        normal.transform.GetChild(i).GetComponent<PlatformMovement>().reset(paused);
+                    }
+                    for (int i = 0; i < gravity.transform.childCount; i++)
+                    {
+                        gravity.transform.GetChild(i).GetComponent<GravityMovement>().reset(paused);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < platforms.transform.childCount; i++)
+                    {
+                        platforms.transform.GetChild(i).GetComponent<PlatformMovement>().reset(paused);
+                    }
                 }
 
                 for (int i = 0; i < enemies.transform.childCount; i++)
                 {
-                    enemies.transform.GetChild(i).GetComponent<SimpleEnemy>().reset(paused);
+                    if (enemies.transform.GetChild(i).name == "Static")
+                    {
+                        for (int j = 0; j < enemies.transform.GetChild(i).transform.childCount; j++)
+                        {
+                            enemies.transform.GetChild(i).transform.GetChild(j).GetComponent<StaticEnemy>().reset(paused);
+                        }
+                    }
+                    if (enemies.transform.GetChild(i).GetComponent<SimpleEnemy>() != null)
+                    {
+                        enemies.transform.GetChild(i).GetComponent<SimpleEnemy>().reset(paused);
+                    }
+                    else
+                    if (enemies.transform.GetChild(i).GetComponent<StaticEnemy>() != null)
+                    {
+                        enemies.transform.GetChild(i).GetComponent<StaticEnemy>().reset(paused);
+                    }
+                }
+                if (rocks != null)
+                {
+                    rocks.GetComponent<RockSystem>().reset(paused);
                 }
                 GetComponent<SwapPlayer>().enabled = false;
                 pausemenu.SetActive(true);
@@ -336,12 +500,7 @@ public class PlayerMovement : MonoBehaviour
         pausemenu.SetActive(false);
     }
 
-    public enum DashState
-    {
-        Ready,
-        Dashing,
-        Cooldown
-    }
+ 
 }
 
 
