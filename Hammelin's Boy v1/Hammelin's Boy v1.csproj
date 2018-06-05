@@ -251,11 +251,13 @@
     <Compile Include="Assets\Scripts\Die.cs" />
     <Compile Include="Assets\Scripts\EndTrigger.cs" />
     <Compile Include="Assets\Scripts\GM_.cs" />
+    <Compile Include="Assets\Scripts\GravityMovement.cs" />
     <Compile Include="Assets\Scripts\MenuManager.cs" />
     <Compile Include="Assets\Scripts\Parallaxing.cs" />
     <Compile Include="Assets\Scripts\Pendulum.cs" />
     <Compile Include="Assets\Scripts\PlatformMovement.cs" />
     <Compile Include="Assets\Scripts\PlayerMovement.cs" />
+    <Compile Include="Assets\Scripts\RatEnemy.cs" />
     <Compile Include="Assets\Scripts\Rock.cs" />
     <Compile Include="Assets\Scripts\RockSystem.cs" />
     <Compile Include="Assets\Scripts\SimpleEnemy.cs" />
