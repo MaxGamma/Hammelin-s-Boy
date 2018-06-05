@@ -84,7 +84,7 @@ public class PlayerMovement : MonoBehaviour
         }
         obstacles = GameObject.Find("Obstacles");
         spikes =  obstacles.transform.GetChild(0).gameObject;
-        rocks = GameObject.Find("Rocks");
+        rocks = GameObject.Find("RocksObject");
         pendulum = obstacles.transform.GetChild(1).gameObject;
 
         boyAnim.SetBool("killed", false);
@@ -197,9 +197,12 @@ public class PlayerMovement : MonoBehaviour
                 }               
             }
         activeMenu();
-
-           
+        if (GameObject.Find("DialogueBox").GetComponent<Animator>().GetBool("IsOpen") && Input.GetKeyDown("joystick button 3"))
+        {
+            GameObject.Find("DialogueManager").GetComponent<DialogueManager>().DisplayNextSentence();
         }
+
+    }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -286,7 +289,10 @@ public class PlayerMovement : MonoBehaviour
             }
             if(rocks!= null)
             {
-                rocks.GetComponent<RockSystem>().die(dead);
+                for (int i = 0; i < rocks.transform.childCount; i++)
+                {
+                    rocks.transform.GetChild(i).GetComponent<RockSystem>().die(dead);
+                }
             }
             GetComponent<SwapPlayer>().enabled = false;
             gameOverAnim.SetBool("isTrigger", true);
@@ -364,7 +370,10 @@ public class PlayerMovement : MonoBehaviour
             }
             if (rocks != null)
             {
-                rocks.GetComponent<RockSystem>().reset(paused);
+                for (int i = 0; i < rocks.transform.childCount; i++)
+                {
+                    rocks.transform.GetChild(i).GetComponent<RockSystem>().reset(paused);
+                }
             }
             GetComponent<SwapPlayer>().enabled = true;
             pausemenu.SetActive(false);
@@ -426,7 +435,10 @@ public class PlayerMovement : MonoBehaviour
                 }
                 if (rocks != null)
                 {
-                    rocks.GetComponent<RockSystem>().reset(paused);
+                    for (int i = 0; i < rocks.transform.childCount; i++)
+                    {
+                        rocks.transform.GetChild(i).GetComponent<RockSystem>().reset(paused);
+                    }
                 }
                 GetComponent<SwapPlayer>().enabled = true;
                 pausemenu.SetActive(false);
@@ -487,7 +499,10 @@ public class PlayerMovement : MonoBehaviour
                 }
                 if (rocks != null)
                 {
-                    rocks.GetComponent<RockSystem>().reset(paused);
+                    for (int i = 0; i < rocks.transform.childCount; i++)
+                    {
+                        rocks.transform.GetChild(i).GetComponent<RockSystem>().reset(paused);
+                    }
                 }
                 GetComponent<SwapPlayer>().enabled = false;
                 pausemenu.SetActive(true);
