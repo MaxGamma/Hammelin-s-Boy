@@ -117,6 +117,20 @@ public class PlayerMovement : MonoBehaviour
             ratAnim.SetBool("ratNotOnTheFloor", true);
         }
 
+        if (Input.GetKey(left) || value == -1 || (Input.GetKey(right) || value == 1))
+        {
+            
+            moveSource.enabled = true;
+            moveSource.loop = true;
+            moveSource.Play();
+        }
+        else
+        {
+            moveSource.Stop();
+            moveSource.enabled = false;
+            moveSource.loop = false;
+        }
+
         if ((Input.GetKey(left) || value == -1) && touchingLeftWall == false)
             {
                 
